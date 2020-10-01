@@ -32,7 +32,13 @@ Presenta el menu de opciones  y  por cada seleccion
 hace la solicitud al controlador para ejecutar la
 operación seleccionada.
 """
-
+"""
+Comentario adicional: algunas funciones, como el tamaño de los
+arboles y demás fueron utilizadas en la implementación del repositorio 
+de prueba para realizar las preguntas correspondientes, en el que se
+imprimia y comparaba el tamaño de los mismo, pero debido a su irrelevancia
+en el requerimento 3 no fueron escritas en este.
+"""
 # ___________________________________________________
 #  Ruta a los archivos
 # ___________________________________________________
