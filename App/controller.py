@@ -100,5 +100,5 @@ def getAccidentsByDate(catalog,search_date):
     """    
     search_date = datetime.datetime.strptime(search_date, '%Y-%m-%d')
     year_date = str(search_date.year)
-    year_ven = catalog[year_date]    
-    return model.getAccidentsByDate(year_ven,search_date.date())
+    year_BST = catalog[year_date]    
+    return model.getAccidentsByDate(year_BST,search_date.date())
