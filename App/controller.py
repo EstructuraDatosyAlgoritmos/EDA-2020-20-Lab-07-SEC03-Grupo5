@@ -42,22 +42,63 @@ def init():
     """
     Llama la funcion de inicializacion del modelo.
     """
-
-    return None
-
+    catalog = model.newCatalog()
+    return catalog
 
 # ___________________________________________________
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
 # ___________________________________________________
 
-def loadData(analyzer, accidentsfile):
+def loadData(catalog, accidentsfile):
     """
     Carga los datos de los archivos CSV en el modelo
     """
+    accidentsfile = cf.data_dir + accidentsfile
+    input_file = csv.DictReader(open(accidentsfile, encoding="utf-8"),demiliter=",")
+    for accident in input_file:
+        model.addAccident(catalog,accident)
     
-    return analyzer
+    return catalog
 
 # ___________________________________________________
 #  Funciones para consultas
 # ___________________________________________________
+
+def yearsSize(catalog):
+    """
+    Llama la función que contiene
+    el número de fechas en las que ocurrieron accidentes en dichos años.
+    """    
+    return model.yearsSize(catalog)
+
+def YearHeight(catalog):
+    """
+    Llama la función que retorna
+    la altura del árbol.
+    """    
+    return model.YearHeight(catalog)
+
+def YearSize_1(catalog):
+    """
+    Llama la función que retorna
+    el número de fechas en las que ocurrieron accidentes
+    por cada año.
+    """    
+    return model.YearSize_1(catalog)
+
+def accidentsSize(catalog):
+    """
+    Llama la función que retorna el número de accidentes.
+    """    
+    return model.accidentsSize(catalog)
+
+def getAccidentsByDate(catalog,search_date):
+    """
+    Llama la función que retorna
+    los accidentes ocurridos en una fecha.
+    """    
+    search_date = datetime.datetime.strptime(search_date, '%Y-%m-%d')
+    year_date = str(search_date.year)
+    year_ven = catalog[year_date]    
+    return model.getAccidentsByDate(year_ven,search_date.date())

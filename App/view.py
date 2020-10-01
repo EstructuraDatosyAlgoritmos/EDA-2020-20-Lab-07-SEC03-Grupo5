@@ -38,7 +38,8 @@ operación seleccionada.
 # ___________________________________________________
 
 
-crimefile = 'crime-utf8.csv'
+#crimefile = 'crime-utf8.csv'
+accidentsFile = 'Accidents/us_accidents_small.csv'
 
 # ___________________________________________________
 #  Menu principal
@@ -51,8 +52,8 @@ def printMenu():
     print("Bienvenido")
     print("1- Inicializar Analizador")
     print("2- Cargar información de accidentes")
-    print("3- Requerimento 1")
-    print("4- Requerimento 2")
+    print("3- Requerimento 1: conocer accidentes en una fecha")
+#    print("4- Requerimento 2")
     print("0- Salir")
     print("*******************************************")
 
@@ -71,14 +72,40 @@ while True:
 
     elif int(inputs[0]) == 2:
         print("\nCargando información de crimenes ....")
+        controller.loadData(cont,accidentsFile)
+        printData(cont)
 
     elif int(inputs[0]) == 3:
         print("\nBuscando crimenes en un rango de fechas: ")
-
+        
 
     elif int(inputs[0]) == 4:
-        print("\nRequerimiento No 1 del reto 3: ")
-
+        print("\nRequerimiento No 1 del reto 3: conocer accidentes en una fecha")
+        search_date = input("Ingrese la fecha a buscar:")
+        accidents_by_date = controller.getAccidentsByDate(cont,search_date)
+        printAccidentsByDate(accidents_by_date,search_date)
     else:
         sys.exit(0)
 sys.exit(0)
+
+# ___________________________________________________
+#  Función que ayuda la impresión del req 1
+# ___________________________________________________
+def printAccidentsByDate(accidents_by_date,search_date):
+    """
+    Imprime los accidentes dada una fecha
+    """
+    if accidents_by_date:
+        print('En el día: ' + search_date , 'Ocurrieron: ' + str((m.size(accidents_by_date['Accidents_lst']))) + " accidentes."))
+        Map_Severity = accidents_by_date['Severities_mp']['table']['elements']
+        for severity in Map_Severity:
+            severity_1 = me.getValue(severity)
+
+            if severity_1 is not None:
+                iterator = it.newIterator(severity_1['ListBySeverity'])
+
+                print('\nAccidentes y su gravedad(severity): ' + str(severity_1['Severity']))
+                while it.hasNext(iterator):
+                    accident = it.next(iterator)
+                    date_time = datetime.datetime.strptime(accident['Start_Time'], '%Y-%m-%d %H:%M:%S')
+                    print('Id: ' +  str(accident['Id']) +  ' Datos Fecha: '+ str(date_time.ctime()))
