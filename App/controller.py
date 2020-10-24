@@ -68,14 +68,14 @@ def loadData(catalog, accidentsfile):
 def yearsSize(catalog):
     """
     Llama la función que contiene
-    el número de fechas en las que ocurrieron accidentes en dichos años.
+    el número de fechas en las que ocurrieron accidentes en dichos años
     """    
     return model.yearsSize(catalog)
 
 def YearHeight(catalog):
     """
     Llama la función que retorna
-    la altura del árbol.
+    la altura del árbol
     """    
     return model.YearHeight(catalog)
 
@@ -83,22 +83,56 @@ def YearSize_1(catalog):
     """
     Llama la función que retorna
     el número de fechas en las que ocurrieron accidentes
-    por cada año.
+    por cada año
     """    
     return model.YearSize_1(catalog)
 
 def accidentsSize(catalog):
     """
-    Llama la función que retorna el número de accidentes.
+    Llama la función que retorna el número de accidentes
     """    
     return model.accidentsSize(catalog)
 
 def getAccidentsByDate(catalog,search_date):
     """
     Llama la función que retorna
-    los accidentes ocurridos en una fecha.
+    los accidentes ocurridos en una fecha
     """    
-    search_date = datetime.datetime.strptime(search_date, '%Y-%m-%d')
+    search_date = datetime.datetime.strptime(search_date, "%Y-%m-%d")
     year_date = str(search_date.year)
     year_ven = catalog[year_date]    
     return model.getAccidentsByDate(year_ven,search_date.date())
+
+def getAccidentsBeforeDate(catalog,search_date):
+    """
+    Reto3 - Req2
+    Llama la función que retorna
+    el número de accidentes ocurridos anteriores a una fecha
+    """      
+    search_date = datetime.datetime.strptime(search_date, "%Y-%m-%d")
+    year_search_date = str(search_date.year)
+    year_bst = catalog[year_search_date]    
+    return model.getAccidentsBeforeDate(year_bst,search_date.date())
+
+def getAccidentsInRange(catalog,initial_date,final_date):
+    """
+    Reto3 - Req3
+    Llama la función que retorna
+    los accidentes en un rango de fechas
+    """
+
+    initial_date = datetime.datetime.strptime(initial_date, "%Y-%m-%d")
+    final_date = datetime.datetime.strptime(final_date, "%Y-%m-%d")
+
+    return model.getAccidentsInRange(catalog,initial_date.date(),final_date.date())
+
+def getState(catalog,initial_date,final_date):
+    """
+    Reto3 - Req4
+    Llama la función que retorna
+    el estado con más accidentes reportados en un rango
+    de fechas
+    """   
+    initial_date = datetime.datetime.strptime(initial_date, "%Y-%m-%d")
+    final_date = datetime.datetime.strptime(final_date, "%Y-%m-%d") 
+    return model.getState(catalog,initial_date.date(),final_date.date())
