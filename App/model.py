@@ -246,6 +246,18 @@ def auxiliarPrintFunction(catalog,initial_date,final_date,acc_in_range,criteria)
             if num_accidents_in_day > more_accidents:                           #Se calcula el día en el que ocurrieron más accidentes en el rango de fechas.
                 more_accidents = num_accidents_in_day
                 more_accidents_day = day
+        cont = cont + 1
+
+    max_dict_value = 0
+    dictionary_keys = dictionary.keys()
+
+    for value in dictionary_keys:                                           #Se calcula la llave del diccionario con mayor valor en el rango de fehcas.
+        num_value = dictionary[value]
+        if num_value > max_dict_value:
+            max_dict_value = num_value
+            max_value = value
+
+    return max_value , dictionary[max_value]  , more_accidents_day ,  num_acc_in_range
 
 def getState(catalog,initial_date,final_date):
     """
