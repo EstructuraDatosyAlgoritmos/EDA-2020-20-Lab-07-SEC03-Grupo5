@@ -46,6 +46,30 @@ accidentsFile = "Accidents/us_accidents_small.csv"
 #  Menu principal
 # ___________________________________________________
 
+#Importante datos y corrección laboratorio 5
+
+def printDatos(cont):
+    """
+    RETO3 - REQ1
+    Imprime la información del catálogo.
+    """ 
+    print('\nAccidentes cargados: ' + str(controller.accidentsSize(cont)))
+    print('Fechas de los accidentes: ' + str(controller.yearsSize(cont)))
+
+    print('\nDias en las que ocurrieron accidentes en 2016: ' + str(controller.YearSize_1(cont)[0]))
+    print('Altura árbol 2016: ' + str(controller.YearHeight(cont)[0]))
+
+    print('\nDias en las que ocurrieron accidentes en 2017: '+ str(controller.YearSize_1(cont)[1]))
+    print('Altura árbol 2017: ' + str(controller.YearHeight(cont)[1]))
+
+    print('\nDias en las que ocurrieron accidentes en 2018: '+ str(controller.YearSize_1(cont)[2]))
+    print('Altura árbol 2018: ' + str(controller.YearHeight(cont)[2]))
+
+    print('\nDias en las que ocurrieron accidentes en 2019: '+ str(controller.YearSize_1(cont)[3]))
+    print('Altura árbol 2019: ' + str(controller.YearHeight(cont)[3]))
+
+    print('\nDias en las que ocurrieron accidentes en 2020: '+ str(controller.YearSize_1(cont)[4]))
+    print('Altura árbol 2020: ' + str(controller.YearHeight(cont)[4]))
 
 def printMenu():
     print("\n")
@@ -76,7 +100,7 @@ while True:
     elif int(inputs[0]) == 2:
         print("\nCargando información de crimenes ....")
         controller.loadData(cont,accidentsFile)
-        printData(cont)
+        printDatos(cont)
 
     elif int(inputs[0]) == 3:
         print("\nRequerimiento No 1 del reto 3: conocer accidentes en una fecha")
@@ -101,7 +125,7 @@ while True:
         print("\nRequerimiento No 4 del reto 3: Conocer el estado con mas accidentes")
         initial_date = input("\nIngrese el límite inferior del rango de fechas (En formato YYYY-MM-DD): ")
         final_date = input("\nIngrese el límite superior del rango de fechas (En formato YYYY-MM-DD): ")
-        return_tuple = controller.getStateWithMoreAccidents(cont,initial_date,final_date)
+        tuple_result = controller.getState(cont,initial_date,final_date)
         printState(tuple_result)
     else:
         sys.exit(0)
