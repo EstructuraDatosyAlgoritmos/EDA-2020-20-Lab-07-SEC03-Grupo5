@@ -38,62 +38,83 @@ es decir contiene los modelos con los datos en memoria
 # API del TAD Catalogo de accidentes
 # -----------------------------------------------------
 
-def newCatalog():
+def newCatalog_1():
     """ Inicializa el catálogo y
-    retorna el catálogo inicializado.
+    retorna el catálogo inicializado
     """
     catalog = {'accidents': None,
-                '2016': None,
-                '2017': None,
-                '2018': None,
-                '2019': None
+                "2016": None,
+                "2017": None,
+                "2018": None,
+                "2019": None,
+                "2020": None
                 }
 
-    catalog['accidents'] = lt.newList('ARRAY_LIST',compareAccidentsID)
-    catalog['2016'] = om.newMap(omaptype='BST',comparefunction=CompareDates_Final)                                    
-    catalog['2017'] = om.newMap(omaptype='BST',comparefunction=CompareDates_Final)                                  
-    catalog['2018'] = om.newMap(omaptype='BST',comparefunction=CompareDates_Final)        
-    catalog['2019'] = om.newMap(omaptype='BST',comparefunction=CompareDates_Final)
+    catalog["accidents"] = lt.newList("ARRAY_LIST",compareAccidentsId)
+    catalog["2016"] = om.newMap(omaptype="BST",comparefunction=CompareDates_Final)                                    
+    catalog["2017"] = om.newMap(omaptype="BST",comparefunction=CompareDates_Final)                                  
+    catalog["2018"] = om.newMap(omaptype="BST",comparefunction=CompareDates_Final)        
+    catalog["2019"] = om.newMap(omaptype="BST",comparefunction=CompareDates_Final)
+    catalog["2020"] = om.newMap(omaptype="BST",comparefunction=CompareDates_Final)
                                       
     return catalog
+def newCatalog():
+    """ Inicializa el catálogo y
+    retorna el catálogo inicializado
+    """
+    catalog = {'accidents': None,
+                "2016": None,
+                "2017": None,
+                "2018": None,
+                "2019": None,
+                "2020": None
+                }
 
+    catalog["accidents"] = lt.newList("ARRAY_LIST",compareAccidentsId)
+    catalog["2016"] = om.newMap(omaptype="RBT",comparefunction=CompareDates_Final)                                    
+    catalog["2017"] = om.newMap(omaptype="RTB",comparefunction=CompareDates_Final)                                  
+    catalog["2018"] = om.newMap(omaptype="RBT",comparefunction=CompareDates_Final)        
+    catalog["2019"] = om.newMap(omaptype="RBT",comparefunction=CompareDates_Final)
+    catalog["2020"] = om.newMap(omaptype="RBT",comparefunction=CompareDates_Final)
+                                      
+    return catalog
 # Funciones para agregar informacion al catalogo
 
 def addAccident(catalog,accident):
     """
-    Adiciona un accidente a la lista de accidentes.
+    Adiciona un accidente a la lista de accidentes
     """  
-    occurred_start_date = accident['Start_Time']
-    accident_date = datetime.datetime.strptime(occurred_start_date, '%Y-%m-%d %H:%M:%S')
+    occurred_start_date = accident["Start_Time"]
+    accident_date = datetime.datetime.strptime(occurred_start_date, "%Y-%m-%d %H:%M:%S")
     ocurred_year = str(accident_date.year) 
-    lt.addLast(catalog['accidents'],accident)
+    lt.addLast(catalog["accidents"],accident)
     uptadeAccidentInDate(catalog[ocurred_year],accident) 
     return catalog 
 
 def newDateEntry():
     """
-    Se crea un nodo dada una fecha con sus respectivas llaves.
+    Se crea un nodo dada una fecha con sus respectivas llaves
     """
-    entry = {'Severities_mp': None, 'Accidents_lst': None}
-    entry['Severities_mp'] = m.newMap(numelements=15,maptype='PROBING',comparefunction=CompareSeverity_prueba)
-    entry['Accidents_lst'] = lt.newList('SINGLE_LINKED', CompareDates_final)
+    entry = {"Severities_mp": None, "Accidents_lst": None}
+    entry["Severities_mp"] = m.newMap(numelements=15,maptype="PROBING",comparefunction=CompareSeverity_prueba)
+    entry["Accidents_lst"] = lt.newList("SINGLE_LINKED", CompareDates_Final)
     return entry
 
 def newSeverityEntry(accident):
     """
     Se crea el grado de gravedad (severity) 
     """
-    severity_entry = {'Severity': None, 'ListBySeverity': None}
-    severity_entry['Severity'] = accident['Severity']
-    severity_entry['ListBySeverity'] = lt.newList('SINGLE_LINKED', CompareSeverity_prueba)
+    severity_entry = {"Severity": None, "ListBySeverity": None}
+    severity_entry["Severity"] = accident["Severity"]
+    severity_entry["ListBySeverity"] = lt.newList("SINGLE_LINKED", CompareSeverity_prueba)
     return severity_entry
 
 def uptadeAccidentInDate(year_map,accident):
     """
     Se busca si existe la fecha del accidente, de no hacerlo la crea
     """
-    ocurred_date = accident['Start_Time']
-    accident_date = datetime.datetime.strptime(ocurred_date, '%Y-%m-%d %H:%M:%S')
+    ocurred_date = accident["Start_Time"]
+    accident_date = datetime.datetime.strptime(ocurred_date, "%Y-%m-%d %H:%M:%S")
     entry = om.get(year_map,accident_date.date())
 
     if entry is None:
@@ -110,17 +131,20 @@ def addSeverityToDateEntry(date_entry,accident):
     """
     Actualiza el grado de severidad.
     """
-    lt.addLast(date_entry['Accidents_lst'],accident)
-    severity = accident['Severity']
-    entry = m.get(date_entry['Severities_mp'], severity)
+    lt.addLast(date_entry["Accidents_lst"],accident)
+    severity = accident["Severity"]
+    entry = m.get(date_entry["Severities_mp"], severity)
 
-    if entry is None:
-        severity_entry = newSeverityEntry(accident)
-        lt.addLast(severity_entry['ListBySeverity'],accident)
-        m.put(date_entry['Severities_mp'] , severity, severity_entry)
-    else:
+    if entry != None:
+
         severity_entry = me.getValue(entry)
-        lt.addLast(severity_entry['ListBySeverity'],accident)
+        lt.addLast(severity_entry["ListBySeverity"],accident)
+
+    else:
+        severity_entry = newSeverityEntry(accident)
+        lt.addLast(severity_entry["ListBySeverity"],accident)
+        m.put(date_entry["Severities_mp"] , severity, severity_entry)
+        
     
     return date_entry
 
@@ -128,63 +152,216 @@ def addSeverityToDateEntry(date_entry,accident):
 # Funciones de consulta
 # ==============================
 
-def getAccidentsByDate(year_ven,search_date):
+def getAccidentsByDate(year_bst,search_date):
     """
-    Retorna el número de accidentes ocurridos en una fecha.
+    Reto3 - Req1
+    Retorna el número de accidentes ocurridos en una fecha
     """        
 
-    date_accidents = om.get(year_ven,search_date)
+    Accidents_Date = om.get(year_bst,search_date)
 
-    if date_accidents['key'] is not None:
-        return me.getValue(date_accidents)
+    if Accidents_Date["key"] is not None:
+        return me.getValue(Accidents_Date)
     
     return None
+
+def getAccidentsBeforeDate(year_RBT,search_date):
+    """
+    Reto3 - Req2
+    Retorna el número de accidentes ocurridos anteriores a una fecha
+    """       
+    Accidents_Date = om.get(year_RBT,search_date)
     
+    if Accidents_Date != None:
+
+        key_date = Accidents_Date["key"]
+        keylow = om.minKey(year_RBT)
+
+        return om.keys(year_RBT,keylow,key_date)
+    return None
+
+def getAccidentsInRange(catalog,initial_date,final_date):
+    """
+    Reto3 - Req3
+    Retorna el número de accidentes ocurridos en un rango de fechas
+    """ 
+    initial_year = str(initial_date.year)
+    final_year = str(final_date.year)  
+    
+    if initial_date == None and final_date == None:
+        print("La fecha ingresada es errónea")
+    else:
+
+        if initial_year == final_year:
+            
+            keylow = om.get(catalog[initial_year],initial_date)["key"]
+            keyhigh = om.get(catalog[initial_year],final_date)["key"]
+       
+            return 0 , om.values(catalog[initial_year],keylow,keyhigh)
+        else:
+
+            keymax = om.maxKey(catalog[initial_year])
+            dates_initial_year = om.values(catalog[initial_year],initial_date,keymax)
+
+            keymin = om.minKey(catalog[final_year])
+            dates_final_year = om.values(catalog[final_year],final_date,keymin)
+            return 1 , dates_initial_year , dates_final_year
+
+    return None
+
+def auxiliardelaauxiliar(catalog,initial_date,final_date):
+    """
+    Retorna una tupla dependiendo si el rango abarca uno o dos años
+    """ 
+    initial_year = str(initial_date.year)
+    final_year = str(final_date.year)  
+    
+    initial_date_accidents = om.contains(catalog[initial_year],initial_date)
+    final_date_accidents = om.contains(catalog[final_year],final_date)
+
+    i=0
+    
+    if i==0 and initial_date_accidents and final_date_accidents:
+        
+        if initial_year == final_year:  
+
+            keylow = om.get(catalog[initial_year],initial_date)["key"]
+            keyhigh = om.get(catalog[initial_year],final_date)["key"]
+    
+            return 0 , om.keys(catalog[initial_year],keylow,keyhigh)
+
+        else:       
+
+            keymax = om.maxKey(catalog[initial_year])
+            dates_initial_year = om.keys(catalog[initial_year],initial_date,keymax)
+
+            keymin = om.minKey(catalog[final_year])
+            dates_final_year = om.keys(catalog[final_year],final_date,keymin)
+            return 1 , dates_initial_year , dates_final_year
+
+    return None
+
+def Impresoradatosreq4(catalog,initial_date,final_date,accidents_in_range,criteria):
+    """
+    Reto3 - Req4
+    """
+    dictionary = {}
+    i = 1
+    
+    if accidents_in_range[0] == 0 and accidents_in_range[1] != None:                      
+        condition = 2
+    elif accidents_in_range[0] == 1 and accidents_in_range[1] != None:                  
+        condition = 3
+       
+    while i < condition:
+        more_accidents = 0
+        num_accidents_in_range = 0
+
+        iterator = it.newIterator(accidents_in_range[1])
+        while it.hasNext(iterator):
+
+            Key_Entry = it.next(iterator)           
+            day = om.get(catalog[str(Key_Entry.year)],Key_Entry)
+            day_accidents = day["value"]["Accidents_lst"]
+
+            iterator_accidents = it.newIterator(day_accidents)
+            while it.hasNext(iterator_accidents):
+                
+                accidents = it.next(iterator_accidents)
+                criteria_dictkey = accidents[criteria]
+                if criteria_dictkey not in dictionary:
+                    dictionary[criteria_dictkey] = 1
+                else:
+                    dictionary[criteria_dictkey] = dictionary[criteria_dictkey] + 1
+
+            num_accidents_in_day =  lt.size(day_accidents) 
+            num_accidents_in_range = num_accidents_in_range + num_accidents_in_day          
+                
+            if num_accidents_in_day > more_accidents:                           
+                more_accidents = num_accidents_in_day
+                more_accidents_day = day
+        i = i + 1
+
+    max_dict_value = 0
+    dictionary_keys = dictionary.keys()
+
+    for value in dictionary_keys:                                           
+        num_value = dictionary[value]
+        if num_value > max_dict_value:
+            max_dict_value = num_value
+            max_value = value
+
+    return max_value , dictionary[max_value]  , more_accidents_day ,  num_accidents_in_range
+
+def getState(catalog,initial_date,final_date):
+    """
+    Reto3 - Req4
+    Retorna el estado con más accidentes
+    """ 
+    criteria = "State"
+    accidents_in_range = auxiliardelaauxiliar(catalog,initial_date,final_date)
+    if accidents_in_range != None:
+        accidents_in_range_by_criteria = Impresoradatosreq4(catalog,initial_date,final_date,accidents_in_range,criteria)
+        return accidents_in_range_by_criteria
+    return None
+
 def yearsSize(catalog):
     """
+    Reto3 - Req1 
     Número de fechas en las que ocurrieron accidentes de todos los años.
     """    
-    Año1=om.size(catalog['2016'])
-    Año2=om.size(catalog['2017'])
-    Año3=om.size(catalog['2018'])
-    Año4=om.size(catalog['2019'])
-    
-    return Año1 + Año2 + Año3 + Año4
+    Año1=om.size(catalog["2016"])
+    Año2=om.size(catalog["2017"])
+    Año3=om.size(catalog["2018"])
+    Año4=om.size(catalog["2019"])
+    Año5=om.size(catalog["2020"])
+    return Año1 + Año2 + Año3 + Año4, Año5
 
 def YearSize_1(catalog):
     """
+    Reto3 - Req1 
     Número de fechas en las que ocurrieron accidentes de
     cada año.
     """    
-    Año1=om.size(catalog['2016'])
-    Año2=om.size(catalog['2017'])
-    Año3=om.size(catalog['2018'])
-    Año4=om.size(catalog['2019'])
-
-    return Año1 , Año2 , Año3 , Año4
+    Año1=om.size(catalog["2016"])
+    Año2=om.size(catalog["2017"])
+    Año3=om.size(catalog["2018"])
+    Año4=om.size(catalog["2019"])
+    Año5=om.size(catalog["2020"])
+    return Año1 , Año2 , Año3 , Año4, Año5
 
 def accidentsSize(catalog):
     """
+    Reto3 - Req1 
     Número de accidentes.
     """  
-    return lt.size(catalog['accidents'])
+    return lt.size(catalog["accidents"])
 
 def YearHeight_1(catalog):
     """
+    Reto3 - Req1 
     Altura del árbol de cada año.
     """       
-    Año1 = om.height(catalog['2016'])
-    Año2 = om.height(catalog['2017'])
-    Año3 = om.height(catalog['2018'])
-    Año4 = om.height(catalog['2019'])
+    Año1=om.size(catalog["2016"])
+    Año2=om.size(catalog["2017"])
+    Año3=om.size(catalog["2018"])
+    Año4=om.size(catalog["2019"])
+    Año5=om.size(catalog["2020"])
 
-    return Año1, Año2, Año3, Año4
+    return Año1, Año2, Año3, Año4, Año5
+
+def statesSize(catalog):
+    """
+    Reto3 - Req4
+    Número de estados cargados.
+    """
+    return m.size(catalog["States"])
 
 # ==============================
 # Funciones de Comparacion
 # ==============================
 
-def CompareSeverity_prueba(severity_accident1,severuty_accident2):
+def CompareSeverity_prueba(severity_accident1,severity_accident2):
     """
     Compara la gravedad de accidentes. 
     """
@@ -196,7 +373,7 @@ def CompareSeverity_prueba(severity_accident1,severuty_accident2):
     else:
         return -1
 
-def CompareDates_final(date1,date2):
+def CompareDates_Final(date1,date2):
     """
     Compara dos fechas de accidentes en años específicos.
     """
@@ -217,3 +394,4 @@ def compareAccidentsId(id1,id2):
         return 1
     else:
         return -1
+
