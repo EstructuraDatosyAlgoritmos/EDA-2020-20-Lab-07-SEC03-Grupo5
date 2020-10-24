@@ -241,7 +241,7 @@ def printState(tuple_result):
     else:
         print("La fecha ingresada no es válida")
 
-        
+
 """
 fin
-""""
+"""
